@@ -1,0 +1,693 @@
+/* Import Fontov */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+/* CSS Custom Properties (Design Tokens) podľa SaasKit analýzy */
+:root {
+  /* Farby */
+  --color-accent-primary: #0EA5E9; /* sky-500 */
+  --color-accent-secondary: #0284C7; /* sky-600 (for hover/active on accent) */
+  --color-sidebar-background: #E0F2FE; /* sky-100 */
+  --color-sidebar-text: #0C4A6E; /* sky-800 (for text on sidebar bg) */
+  --color-sidebar-text-active: var(--color-accent-primary);
+  --color-sidebar-icon-active: var(--color-accent-primary);
+  --color-sidebar-active-bg: #FFFFFF; /* White background for active nav item */
+
+  --color-background-main: #F8FAFC; /* slate-50 */
+  --color-card-background: #FFFFFF;
+  
+  --color-text-primary: #1F2937; /* gray-800 */
+  --color-text-secondary: #6B7280; /* gray-500 */
+  --color-text-placeholder: #9CA3AF; /* gray-400 */
+  --color-text-on-accent: #FFFFFF;
+
+  --color-border: #D1D5DB; /* gray-300 */
+  --color-border-light: #E5E7EB; /* gray-200 */
+  --color-border-focus: var(--color-accent-primary);
+
+  --color-error: #EF4444; /* red-500 */
+  --color-error-background: #FEE2E2; /* red-100 */
+  --color-error-border: #FCA5A5; /* red-300 */
+
+  --color-success: #22C55E; /* green-500 */
+  --color-success-background: #DCFCE7; /* green-100 */
+  --color-success-border: #86EFAC; /* green-300 */
+
+  /* Typografia */
+  --font-primary: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  --font-code: 'Courier New', Courier, monospace;
+
+  --font-size-base: 1rem; /* 16px */
+  --font-size-xs: 0.75rem; /* 12px */
+  --font-size-sm: 0.875rem; /* 14px */
+  --font-size-md: 1rem; /* 16px */
+  --font-size-lg: 1.125rem; /* 18px */
+  --font-size-xl: 1.25rem; /* 20px */
+  --font-size-h1: 1.875rem; /* 30px (Module titles in content area) */
+  --font-size-h2: 1.5rem;   /* 24px (Sub-headings within modules) */
+  --font-size-sidebar-title: 1.25rem; /* 20px (App title in sidebar) */
+
+  --line-height-base: 1.6;
+  --line-height-heading: 1.3;
+
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  /* Spacing (8px grid system) */
+  --spacing-unit: 8px;
+  --spacing-xxs: calc(0.5 * var(--spacing-unit)); /* 4px */
+  --spacing-xs: var(--spacing-unit); /* 8px */
+  --spacing-sm: calc(1.5 * var(--spacing-unit)); /* 12px */
+  --spacing-md: calc(2 * var(--spacing-unit)); /* 16px */
+  --spacing-lg: calc(3 * var(--spacing-unit)); /* 24px */
+  --spacing-xl: calc(4 * var(--spacing-unit)); /* 32px */
+  --spacing-xxl: calc(6 * var(--spacing-unit)); /* 48px */
+
+  /* Ostatné */
+  --border-radius-sm: 4px;
+  --border-radius-md: 8px;
+  --border-radius-lg: 12px;
+  
+  --box-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --box-shadow-md: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+  --box-shadow-lg: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+
+  --sidebar-width: 260px;
+  --sidebar-width-collapsed: 80px; /* For potential future collapsed state */
+  --transition-speed: 0.2s;
+}
+
+/* Základný reset a globálne štýly */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+body, html {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-primary);
+  line-height: var(--line-height-base);
+  background-color: var(--color-background-main);
+  color: var(--color-text-primary);
+  font-size: var(--font-size-base);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  min-height: 100vh;
+  display: flex; /* Changed from column to row for sidebar layout */
+}
+
+/* Hlavný Layout Aplikácie */
+.app-layout {
+  display: flex;
+  width: 100%;
+  min-height: 100vh;
+}
+
+/* Sidebar Navigácia */
+.app-sidebar {
+  width: var(--sidebar-width);
+  background-color: var(--color-sidebar-background);
+  padding: var(--spacing-lg) var(--spacing-md);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  border-right: 1px solid var(--color-border-light);
+  box-shadow: var(--box-shadow-sm);
+  transition: width var(--transition-speed) ease;
+}
+
+.sidebar-header {
+  margin-bottom: var(--spacing-xl);
+}
+
+.sidebar-header h1 {
+  font-size: var(--font-size-sidebar-title);
+  color: var(--color-text-primary); /* Darker text for app title */
+  font-weight: var(--font-weight-semibold);
+  margin: 0;
+  padding-left: var(--spacing-xs); /* Align with nav items */
+}
+
+.sidebar-nav-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  flex-grow: 1;
+}
+
+.sidebar-nav-list li button {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: var(--spacing-sm) var(--spacing-xs);
+  margin-bottom: var(--spacing-xs);
+  text-align: left;
+  background-color: transparent;
+  border: none;
+  border-radius: var(--border-radius-md);
+  color: var(--color-sidebar-text);
+  font-family: var(--font-primary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease;
+}
+
+.nav-icon {
+  display: inline-block;
+  width: 20px; /* Space for icon */
+  height: 20px;
+  margin-right: var(--spacing-sm);
+  color: currentColor; /* Inherits color from button text */
+  flex-shrink: 0;
+  font-size: 1.25em; /* For emoji icons */
+  line-height: 1;
+}
+
+.sidebar-nav-list li button:hover {
+  background-color: rgba(14, 165, 233, 0.1); /* Light accent hover */
+  color: var(--color-accent-primary);
+}
+
+.sidebar-nav-list li button.active {
+  background-color: var(--color-sidebar-active-bg);
+  color: var(--color-sidebar-text-active);
+  font-weight: var(--font-weight-semibold);
+  box-shadow: var(--box-shadow-sm);
+}
+.sidebar-nav-list li button.active .nav-icon {
+    color: var(--color-sidebar-icon-active);
+}
+
+.sidebar-footer {
+  margin-top: auto;
+  padding-top: var(--spacing-md);
+  border-top: 1px solid var(--color-border-light);
+}
+.sidebar-footer p {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+  text-align: center;
+  margin: 0;
+}
+
+
+/* Hlavná Obsahová Časť (Wrapper) */
+.main-content-wrapper {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-background-main);
+  overflow-y: auto; /* Allow scrolling for main content */
+}
+
+.main-content-module-header {
+  /* This header is currently minimal as module titles are within module-content */
+  /* padding: var(--spacing-md) var(--spacing-lg); */
+  /* border-bottom: 1px solid var(--color-border); */
+  /* background-color: var(--color-card-background); */
+  /* box-shadow: var(--box-shadow-sm); */
+  /* margin-bottom: var(--spacing-lg); */
+  min-height: var(--spacing-lg); /* Ensure some space if empty */
+}
+
+
+/* Skutočná plocha pre obsah modulu */
+.app-main-content-area {
+  padding: var(--spacing-lg);
+  flex-grow: 1;
+}
+
+/* Obsah modulu (karta) */
+.module-content {
+  background-color: var(--color-card-background);
+  padding: var(--spacing-lg);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--box-shadow-md);
+  animation: fadeIn 0.3s ease-out;
+  border: 1px solid var(--color-border-light);
+}
+
+.module-content h2 {
+  font-family: var(--font-primary);
+  font-size: var(--font-size-h1);
+  color: var(--color-text-primary);
+  margin-top: 0;
+  margin-bottom: var(--spacing-xs);
+  font-weight: var(--font-weight-semibold);
+}
+
+.module-description {
+  font-size: var(--font-size-md);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--spacing-xl);
+  line-height: var(--line-height-base);
+}
+
+.module-description strong {
+    color: var(--color-accent-primary);
+    font-weight: var(--font-weight-medium);
+}
+
+/* Formulárové prvky */
+.form-group {
+  margin-bottom: var(--spacing-lg);
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: var(--spacing-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+  font-size: var(--font-size-sm);
+}
+
+textarea, select, input[type="text"], input[type="url"] {
+  width: 100%;
+  padding: var(--spacing-sm) var(--spacing-md);
+  background-color: var(--color-card-background); /* White background for inputs */
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-md);
+  font-size: var(--font-size-md);
+  color: var(--color-text-primary);
+  box-sizing: border-box;
+  transition: border-color var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
+  font-family: var(--font-primary);
+}
+
+textarea::placeholder, input::placeholder {
+    color: var(--color-text-placeholder);
+    opacity: 1;
+}
+
+textarea:focus, select:focus, input[type="text"]:focus, input[type="url"]:focus {
+  border-color: var(--color-border-focus);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.2); /* Accent focus glow */
+}
+
+select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%236B7280'%3E%3Cpath fill-rule='evenodd' d='M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z' clip-rule='evenodd'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right var(--spacing-sm) center;
+  background-size: 1.25em;
+  padding-right: calc(var(--spacing-sm) + 1.5em);
+}
+
+.conditional-field {
+  margin-top: var(--spacing-lg);
+  padding-top: var(--spacing-md);
+  border-top: 1px solid var(--color-border-light);
+}
+
+.radio-group, .checkbox-group {
+  display: flex;
+  flex-wrap: wrap; 
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+  padding-left: var(--spacing-xxs);
+}
+.checkbox-grid { /* For App Concept Generator checkboxes */
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--spacing-sm) var(--spacing-lg);
+  margin-bottom: var(--spacing-lg);
+}
+.checkbox-grid .checkbox-group {
+  margin-bottom: 0; /* Reset margin for grid items */
+  gap: var(--spacing-xs);
+}
+
+
+.radio-group label, .checkbox-group label {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  font-weight: var(--font-weight-regular); 
+  color: var(--color-text-primary);
+  cursor: pointer;
+  padding: var(--spacing-xs) 0; /* Minimal padding for label text */
+  border-radius: var(--border-radius-sm);
+  transition: color var(--transition-speed) ease;
+  font-size: var(--font-size-sm);
+}
+
+.radio-group input[type="radio"], .checkbox-group input[type="checkbox"] {
+  appearance: none;
+  width: 1.25em;
+  height: 1.25em;
+  border: 2px solid var(--color-border);
+  border-radius: 50%; /* pre radio */
+  cursor: pointer;
+  transition: all var(--transition-speed) ease;
+  flex-shrink: 0;
+  position: relative;
+  background-color: var(--color-card-background);
+}
+.checkbox-group input[type="checkbox"] {
+  border-radius: var(--border-radius-sm); /* pre checkbox */
+}
+
+.radio-group input[type="radio"]:checked,
+.checkbox-group input[type="checkbox"]:checked {
+  background-color: var(--color-accent-primary);
+  border-color: var(--color-accent-primary);
+}
+
+.radio-group input[type="radio"]:checked::before { /* Dot for radio */
+  content: '';
+  display: block;
+  width: 0.5em;
+  height: 0.5em;
+  background-color: var(--color-text-on-accent);
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.checkbox-group input[type="checkbox"]:checked::before { /* Checkmark for checkbox */
+  content: '';
+  display: block;
+  width: 0.3em;
+  height: 0.6em;
+  border: solid var(--color-text-on-accent);
+  border-width: 0 2px 2px 0;
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.radio-group label:hover input[type="radio"]:not(:checked),
+.checkbox-group label:hover input[type="checkbox"]:not(:checked) {
+  border-color: var(--color-accent-primary);
+}
+.radio-group label:hover, .checkbox-group label:hover {
+  color: var(--color-text-primary);
+}
+
+/* Tlačidlá */
+.action-buttons {
+  display: flex;
+  gap: var(--spacing-sm);
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: var(--spacing-xl);
+}
+
+.button-primary {
+  background-color: var(--color-accent-primary);
+  color: var(--color-text-on-accent);
+  border: none;
+  padding: var(--spacing-sm) var(--spacing-lg);
+  border-radius: var(--border-radius-md);
+  cursor: pointer;
+  font-family: var(--font-primary);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-medium);
+  transition: background-color var(--transition-speed) ease, box-shadow var(--transition-speed) ease, transform var(--transition-speed) ease;
+  box-shadow: var(--box-shadow-sm);
+}
+
+.button-primary:hover {
+  background-color: var(--color-accent-secondary);
+  box-shadow: var(--box-shadow-md);
+  transform: translateY(-1px);
+}
+
+.button-primary:focus-visible {
+  outline: 2px solid var(--color-accent-primary);
+  outline-offset: 2px;
+}
+
+.button-primary:disabled {
+  background-color: var(--color-border);
+  color: var(--color-text-secondary);
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: translateY(0);
+}
+
+.button-secondary {
+  background-color: var(--color-card-background);
+  color: var(--color-accent-primary);
+  border: 1px solid var(--color-accent-primary);
+  padding: calc(var(--spacing-sm) - 1px) calc(var(--spacing-lg) - 1px);
+  border-radius: var(--border-radius-md);
+  cursor: pointer;
+  font-family: var(--font-primary);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-medium);
+  transition: all var(--transition-speed) ease;
+}
+
+.button-secondary:hover {
+  background-color: rgba(14, 165, 233, 0.05); /* Very light accent bg */
+  border-color: var(--color-accent-secondary);
+  color: var(--color-accent-secondary);
+  transform: translateY(-1px);
+}
+.button-secondary.clear-button:hover {
+  background-color: rgba(239, 68, 68, 0.05);
+  border-color: var(--color-error);
+  color: var(--color-error);
+}
+.button-secondary.copy-button:hover {
+  background-color: rgba(34, 197, 94, 0.05);
+  border-color: var(--color-success);
+  color: var(--color-success);
+}
+
+
+/* Oblasť výstupu */
+.output-area {
+  margin-top: var(--spacing-xl);
+  padding: var(--spacing-lg);
+  background-color: var(--color-card-background);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-md);
+  white-space: pre-wrap; 
+  word-wrap: break-word; 
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-base);
+  color: var(--color-text-primary);
+  max-height: 600px; 
+  overflow-y: auto;
+  box-shadow: var(--box-shadow-sm);
+}
+.output-area br { 
+  content: ""; display: block; margin-bottom: 0.5em; 
+}
+.output-area strong {
+  font-weight: var(--font-weight-semibold); 
+  color: var(--color-text-primary);
+}
+.output-area em {
+  color: var(--color-accent-primary);
+  font-style: italic; 
+}
+.output-area hr.section-divider {
+  border: none;
+  height: 1px;
+  background-color: var(--color-border-light);
+  margin: var(--spacing-lg) 0;
+}
+.output-area ul, .output-area ol {
+  padding-left: var(--spacing-lg);
+  margin: var(--spacing-sm) 0;
+}
+.output-area li {
+  margin-bottom: var(--spacing-xs);
+}
+.output-area li::marker {
+  color: var(--color-accent-primary);
+}
+
+
+/* Code block styling */
+.code-block {
+  background-color: #2D3748; /* gray-800 for dark code block bg */
+  color: #E2E8F0; /* gray-200 for code text */
+  padding: var(--spacing-md);
+  border-radius: var(--border-radius-md);
+  overflow-x: auto;
+  margin: var(--spacing-md) 0;
+  white-space: pre !important; 
+  font-family: var(--font-code); 
+  font-size: var(--font-size-sm);
+  line-height: 1.5; 
+  border: 1px solid var(--color-border);
+}
+.code-block.css-code { /* Specific for CSS */
+   border-left: 4px solid var(--color-accent-primary);
+}
+.code-block code {
+  font-family: inherit; 
+  white-space: pre !important; 
+}
+
+
+/* Chybové a úspechové hlásenia */
+.message-container {
+    padding: 0 0 var(--spacing-md) 0; /* Add padding if message is above module content */
+}
+.error-message, .success-message {
+  border: 1px solid;
+  padding: var(--spacing-md);
+  border-radius: var(--border-radius-md);
+  margin-bottom: var(--spacing-lg); /* If messages are inside .app-main-content-area but outside .module-content */
+  text-align: center;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+}
+.error-message {
+  color: #991B1B; /* red-800 */
+  background-color: var(--color-error-background);
+  border-color: var(--color-error-border);
+}
+.success-message {
+  color: #166534; /* green-800 */
+  background-color: var(--color-success-background);
+  border-color: var(--color-success-border);
+}
+
+/* Pätička */
+.app-footer-main {
+  text-align: center;
+  padding: var(--spacing-lg);
+  background-color: var(--color-background-main);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  margin-top: auto; 
+  border-top: 1px solid var(--color-border-light);
+}
+
+/* Animácia */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(var(--spacing-sm)); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Responzivita */
+@media (max-width: 1024px) {
+  .app-sidebar {
+    width: var(--sidebar-width-collapsed);
+  }
+  .app-sidebar .sidebar-header h1,
+  .app-sidebar .sidebar-nav-list li button span:not(.nav-icon),
+  .app-sidebar .sidebar-footer p {
+    display: none; /* Hide text, show only icons */
+  }
+   .app-sidebar .sidebar-header { /* Center the remaining icon/logo if any */
+    /* Add styling if a logo icon remains */
+    justify-content: center;
+    padding-left: 0;
+    margin-bottom: var(--spacing-lg);
+  }
+  .sidebar-nav-list li button {
+    justify-content: center;
+    padding: var(--spacing-md) 0;
+  }
+  .nav-icon {
+    margin-right: 0;
+    font-size: 1.5em; /* Larger icons when collapsed */
+  }
+}
+
+@media (max-width: 768px) {
+  .app-layout {
+    flex-direction: column;
+  }
+  .app-sidebar {
+    width: 100%;
+    height: auto;
+    flex-direction: row; /* For horizontal layout of items if desired, or keep column */
+    padding: var(--spacing-sm);
+    box-shadow: var(--box-shadow-sm);
+    border-right: none;
+    border-bottom: 1px solid var(--color-border-light);
+    align-items: center; /* Center items if row */
+  }
+  .app-sidebar .sidebar-header {
+    margin-bottom: 0;
+    margin-right: auto; /* Push nav list to the right */
+  }
+  .app-sidebar .sidebar-header h1 {
+      display: block; /* Show title again on mobile */
+      font-size: var(--font-size-lg);
+  }
+  .sidebar-nav-list {
+    flex-direction: row; /* Horizontal nav items */
+    gap: var(--spacing-xs);
+    flex-grow: 0; /* Don't grow to take all space */
+  }
+  .sidebar-nav-list li button {
+    padding: var(--spacing-xs) var(--spacing-sm);
+    margin-bottom: 0;
+  }
+  .sidebar-nav-list li button .nav-icon {
+    display: block; /* Show icons again */
+    font-size: 1.25em;
+    margin-right: var(--spacing-xs);
+  }
+   .sidebar-nav-list li button span:not(.nav-icon) {
+    display: none; /* Hide text on very small mobile nav if icons are shown */
+  }
+  .app-sidebar .sidebar-footer {
+    display: none; /* Hide sidebar footer on mobile */
+  }
+
+  .main-content-wrapper {
+    /* Full width */
+  }
+  .app-main-content-area {
+    padding: var(--spacing-md);
+  }
+  .module-content {
+    padding: var(--spacing-md);
+  }
+  .module-content h2 {
+    font-size: var(--font-size-lg); /* Slightly smaller on mobile */
+  }
+  .radio-group, .checkbox-grid .checkbox-group {
+    flex-direction: column; 
+    align-items: flex-start;
+    gap: var(--spacing-xs);
+  }
+   .checkbox-grid {
+    grid-template-columns: 1fr; /* Stack checkboxes on mobile */
+  }
+  .action-buttons {
+    flex-direction: column;
+    align-items: stretch; 
+  }
+  .action-buttons button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .app-sidebar .sidebar-header h1 {
+    font-size: var(--font-size-md);
+  }
+  .sidebar-nav-list li button {
+    padding: var(--spacing-xs);
+  }
+   .sidebar-nav-list li button .nav-icon {
+    margin-right: 0;
+  }
+  .output-area {
+    max-height: 350px; 
+    font-size: var(--font-size-sm);
+  }
+  .button-primary, .button-secondary {
+    font-size: var(--font-size-sm);
+    padding: var(--spacing-sm) var(--spacing-md);
+  }
+}

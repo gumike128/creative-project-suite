@@ -1,0 +1,5 @@
+{
+  "name": "Creative Project Suite",
+  "description": "Aplikácia pre projektový manažment, generovanie kreatívnych aktív a pomoc s promptami pomocou Gemini API.",
+  "requestFramePermissions": []
+}
